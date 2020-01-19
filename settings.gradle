@@ -1,0 +1,2 @@
+include ':finished_code'
+rootProject.name='Fast finger'
