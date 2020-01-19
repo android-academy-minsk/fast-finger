@@ -2,7 +2,7 @@ package by.android.academy.minsk.fastfinger
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import by.android.academy.minsk.fastfinger.ui.main.GameFragment
+import by.android.academy.minsk.fastfinger.game.GameFragment
 
 class MainActivity : AppCompatActivity() {
 

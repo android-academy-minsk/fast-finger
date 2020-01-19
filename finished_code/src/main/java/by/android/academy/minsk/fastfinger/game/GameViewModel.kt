@@ -1,13 +1,16 @@
-package by.android.academy.minsk.fastfinger.ui.main
+package by.android.academy.minsk.fastfinger.game
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.android.academy.minsk.fastfinger.score.ScoreRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class GameViewModel : ViewModel() {
+class GameViewModel(
+    private val scoreRepository: ScoreRepository
+) : ViewModel() {
 
     private var score = 0
 
@@ -16,6 +19,9 @@ class GameViewModel : ViewModel() {
 
     private val _button = MutableLiveData<ButtonState>(ButtonState.READY_TO_START)
     val button: LiveData<ButtonState> get() = _button
+
+    private val _bestLocalScore = MutableLiveData("")
+    val bestLocalScore get() = _bestLocalScore
 
     fun onButtonClick() {
         when (button.value) {
@@ -56,9 +62,26 @@ class GameViewModel : ViewModel() {
 
     private suspend fun finishGame() {
         _message.value = "Your score is ${score}"
+        val newBestLocalScore = scoreRepository.updateLocalBestScore(score)
+        setBestLocalScore(newBestLocalScore)
         _button.value = ButtonState.FINISHING
         delay(2000)
         _button.value = ButtonState.READY_TO_START
+    }
+
+    fun onScreenOpen() {
+        viewModelScope.launch {
+            val bestScore = scoreRepository.getBestLocalScore()
+            setBestLocalScore(bestScore)
+        }
+    }
+
+    private fun setBestLocalScore(bestScore: Int) {
+        _bestLocalScore.value = if (bestScore > 0) {
+            "Best score is $bestScore"
+        } else {
+            ""
+        }
     }
 }
 

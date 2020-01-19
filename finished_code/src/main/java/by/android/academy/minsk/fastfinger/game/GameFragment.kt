@@ -1,4 +1,4 @@
-package by.android.academy.minsk.fastfinger.ui.main
+package by.android.academy.minsk.fastfinger.game
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +20,13 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
+        viewModel = ViewModelProviders.of(
+            this,
+            gameViewModelFactory(context!!)
+        ).get(GameViewModel::class.java)
+        if (savedInstanceState == null) {
+            viewModel.onScreenOpen()
+        }
     }
 
     override fun onCreateView(
@@ -44,6 +50,9 @@ class GameFragment : Fragment() {
         button.setOnClickListener { viewModel.onButtonClick() }
         viewModel.message.observe(viewLifecycleOwner) {
             message.text = it
+        }
+        viewModel.bestLocalScore.observe(viewLifecycleOwner) {
+            bestScore.text = it
         }
     }
 }
