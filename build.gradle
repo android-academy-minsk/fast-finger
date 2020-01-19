@@ -32,6 +32,9 @@ buildscript {
 
                 // Room for database
                 "androidx.room:room-ktx:$room_version",
+
+                //network
+                "com.squareup.okhttp3:okhttp:4.3.1",
         ]
         androidLibrariesKapt = [
                 "androidx.room:room-compiler:$room_version",
