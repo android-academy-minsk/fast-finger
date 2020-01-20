@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class WebSocketEcho(val callback: (String) -> Unit) : WebSocketListener() {
     fun run() {
         val client = OkHttpClient.Builder()
-            .readTimeout(0, TimeUnit.MILLISECONDS)
+            .readTimeout(500, TimeUnit.MILLISECONDS)
             .build()
 
         val request = Request.Builder()
