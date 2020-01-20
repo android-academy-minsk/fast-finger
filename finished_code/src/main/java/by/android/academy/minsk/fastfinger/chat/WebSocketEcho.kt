@@ -1,5 +1,6 @@
 package by.android.academy.minsk.fastfinger.chat
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -9,7 +10,7 @@ import okio.ByteString.Companion.decodeHex
 import java.util.concurrent.TimeUnit
 
 // https://github.com/square/okhttp/blob/master/samples/guide/src/main/java/okhttp3/recipes/WebSocketEcho.java
-class WebSocketEcho(val callback: (String) -> Unit) : WebSocketListener() {
+class WebSocketEcho : WebSocketListener() {
     fun run() {
         val client = OkHttpClient.Builder()
             .readTimeout(500, TimeUnit.MILLISECONDS)
@@ -48,11 +49,7 @@ class WebSocketEcho(val callback: (String) -> Unit) : WebSocketListener() {
         t.printStackTrace()
     }
 
-    var latestResult = ""
     fun println(text: String) {
-        latestResult + text
-        GlobalScope.launch(Dispatchers.Main) {
-            callback(latestResult)
-        }
+        Log.d("socket output", text)
     }
 }
