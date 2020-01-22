@@ -1,5 +1,6 @@
 package by.android.academy.minsk.fastfinger.chat
 
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
@@ -12,7 +13,7 @@ sealed class Frame {
     object ConnectionClosed : Frame()
     object Connecting : Frame()
     object Connected : Frame()
-    object ConnectionError : Frame()
+    data class ConnectionError(val errorMessage: String) : Frame()
 }
 
 fun connectToChat(): Flow<Frame> = callbackFlow {
@@ -37,7 +38,12 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             offer(Frame.NewMessage(bytes.hex()))
         }
+
+        override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+            offer(Frame.ConnectionError(t.message ?: "failed with unknown reason"))
+        }
     }
-    client.newWebSocket(request, webSocketListener)
+    val socket = client.newWebSocket(request, webSocketListener)
     offer(Frame.Connecting)
+    awaitClose { socket.close(1000, "Goodbye") }
 }

@@ -17,6 +17,7 @@ class ChatViewModel : ViewModel() {
                 when (it) {
                     is Frame.Connecting -> addText("connecting")
                     is Frame.NewMessage -> addText(it.text)
+                    is Frame.ConnectionError -> addText(it.errorMessage)
                 }
             }
         }
