@@ -13,11 +13,13 @@ class ChatViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            connectToChat().collect {
+            connectWithRetry().collect {
                 when (it) {
                     is Frame.Connecting -> addText("connecting")
                     is Frame.NewMessage -> addText(it.text)
                     is Frame.ConnectionError -> addText(it.errorMessage)
+                    is Frame.ReconnectingIn -> addText("reconnecting in ${it.seconds}")
+                    is Frame.Connected -> addText("connected")
                 }
             }
         }

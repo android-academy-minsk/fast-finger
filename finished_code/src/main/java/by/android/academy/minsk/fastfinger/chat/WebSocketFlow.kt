@@ -1,9 +1,8 @@
 package by.android.academy.minsk.fastfinger.chat
 
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.TimeUnit
@@ -13,7 +12,23 @@ sealed class Frame {
     object ConnectionClosed : Frame()
     object Connecting : Frame()
     object Connected : Frame()
+    data class ReconnectingIn(val seconds: Int) : Frame()
     data class ConnectionError(val errorMessage: String) : Frame()
+}
+
+fun connectWithRetry(): Flow<Frame> = connectToChat().flatMapConcat { frame ->
+    when (frame) {
+        is Frame.ConnectionError -> connectWithRetry().onStart {
+            emit(frame)
+            emit(Frame.ReconnectingIn(3))
+            delay(1000)
+            emit(Frame.ReconnectingIn(2))
+            delay(1000)
+            emit(Frame.ReconnectingIn(1))
+            delay(1000)
+        }
+        else -> flowOf(frame)
+    }
 }
 
 fun connectToChat(): Flow<Frame> = callbackFlow {
@@ -28,7 +43,7 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
     val webSocketListener = object : WebSocketListener() {
 
         override fun onOpen(webSocket: WebSocket, response: Response) {
-            webSocket.send("hello")
+            offer(Frame.Connected)
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
@@ -41,6 +56,12 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             offer(Frame.ConnectionError(t.message ?: "failed with unknown reason"))
+            close()
+        }
+
+        override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+            offer(Frame.ConnectionClosed)
+            close()
         }
     }
     val socket = client.newWebSocket(request, webSocketListener)
