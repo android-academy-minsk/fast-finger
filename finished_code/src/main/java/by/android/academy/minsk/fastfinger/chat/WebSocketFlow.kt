@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 sealed class Frame {
     data class NewMessage(val text: String) : Frame()
-    object ConnectionClosed : Frame()
+    data class ConnectionClosed(val reason: String?) : Frame()
     object Connecting : Frame()
     object Connected : Frame()
     data class ReconnectingIn(val seconds: Int) : Frame()
@@ -60,11 +60,13 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-            offer(Frame.ConnectionClosed)
-            close()
+            if (code != 1001) {
+                offer(Frame.ConnectionClosed(reason))
+                close()
+            }
         }
     }
     val socket = client.newWebSocket(request, webSocketListener)
     offer(Frame.Connecting)
-    awaitClose { socket.close(1000, "Goodbye") }
+    awaitClose { socket.close(1001, "by client initiative") }
 }

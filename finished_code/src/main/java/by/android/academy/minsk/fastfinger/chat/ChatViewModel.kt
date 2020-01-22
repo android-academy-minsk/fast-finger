@@ -20,6 +20,9 @@ class ChatViewModel : ViewModel() {
                     is Frame.ConnectionError -> addText(it.errorMessage)
                     is Frame.ReconnectingIn -> addText("reconnecting in ${it.seconds}")
                     is Frame.Connected -> addText("connected")
+                    is Frame.ConnectionClosed -> addText(
+                        "connection was closed: ${it.reason ?: "unknown reason"}"
+                    )
                 }
             }
         }
