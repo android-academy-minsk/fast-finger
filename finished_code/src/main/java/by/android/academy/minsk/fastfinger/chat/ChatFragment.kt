@@ -10,7 +10,6 @@ import androidx.lifecycle.observe
 import by.android.academy.minsk.fastfinger.R
 import kotlinx.android.synthetic.main.chat_fragment.*
 
-//NOT READY, JUST A TRY
 class ChatFragment : Fragment() {
 
     private lateinit var chatViewModel: ChatViewModel

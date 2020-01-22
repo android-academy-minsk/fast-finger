@@ -1,13 +1,12 @@
 package by.android.academy.minsk.fastfinger.game
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import by.android.academy.minsk.fastfinger.R
+import by.android.academy.minsk.fastfinger.chat.ChatFragment
 import kotlinx.android.synthetic.main.game_fragment.*
 
 class GameFragment : Fragment() {
@@ -20,6 +19,7 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         viewModel = ViewModelProviders.of(
             this,
             gameViewModelFactory(context!!)
@@ -54,5 +54,23 @@ class GameFragment : Fragment() {
         viewModel.bestLocalScore.observe(viewLifecycleOwner) {
             bestScore.text = it
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.openChat) {
+            activity?.let {
+                it.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, ChatFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
