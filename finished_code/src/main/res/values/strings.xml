@@ -3,4 +3,6 @@
     <string name="ready_to_start_game">Start</string>
     <string name="game_in_progress">Click Me!</string>
     <string name="starting_game">preparing...</string>
+    <string name="send">Send</string>
+    <string name="type_your_message_here">Type your message here</string>
 </resources>

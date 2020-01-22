@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
-    private val _chatText = MutableLiveData<String>("")
-    val chatText: LiveData<String> get() = _chatText
+    private val _chatText = MutableLiveData<List<String>>(emptyList())
+    val chatText: LiveData<List<String>> get() = _chatText
 
     init {
         viewModelScope.launch {
@@ -29,6 +29,6 @@ class ChatViewModel : ViewModel() {
     }
 
     private fun addText(text: String) {
-        _chatText.value = _chatText.value!! + "\n$text"
+        _chatText.value = _chatText.value!! + text
     }
 }
