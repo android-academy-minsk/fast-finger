@@ -13,6 +13,8 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.websocket.WebSockets
 import io.ktor.websocket.webSocket
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.LinkedHashSet
@@ -40,7 +42,6 @@ fun main(args: Array<String>) {
                                 val text = frame.readText()
                                 // Iterate over all the connections
                                 val textToSend = "${client.name} said: $text"
-                                println(textToSend)
                                 for (other in clients.toList()) {
                                     other.session.outgoing.send(Frame.Text(textToSend))
                                 }
@@ -49,6 +50,15 @@ fun main(args: Array<String>) {
                     }
                 } finally {
                     clients -= client
+                }
+            }
+            GlobalScope.launch {
+                while (true) {
+                    println("type broadcast message:")
+                    val broadcastMessage = readLine()
+                    for (other in clients.toList()) {
+                        other.session.outgoing.send(Frame.Text(broadcastMessage ?: ""))
+                    }
                 }
             }
         }
