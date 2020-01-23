@@ -44,14 +44,18 @@ class GameViewModel(
     }
 
     private suspend fun launchGame() {
+        prepareGame()
+        startGame()
+        delay(5000)
+        finishGame()
+    }
+
+    private suspend fun prepareGame() {
         _button.value = ButtonState.STARTING
         _message.value = "READY"
         delay(500)
         _message.value = "STEADY"
         delay(500)
-        startGame()
-        delay(5000)
-        finishGame()
     }
 
     private fun startGame() {
@@ -61,7 +65,7 @@ class GameViewModel(
     }
 
     private suspend fun finishGame() {
-        _message.value = "Your score is ${score}"
+        _message.value = "Your score is $score"
         val newBestLocalScore = scoreRepository.updateLocalBestScore(score)
         setBestLocalScore(newBestLocalScore)
         _button.value = ButtonState.FINISHING
