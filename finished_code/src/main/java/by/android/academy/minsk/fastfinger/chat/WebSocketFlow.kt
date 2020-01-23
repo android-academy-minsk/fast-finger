@@ -38,7 +38,7 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
         .build()
 
     val request = Request.Builder()
-        .url(WEB_SOCKET_SERVER_URL)
+        .url("$WEB_SOCKET_SERVER_URL/chat")
         .build()
 
     val webSocketListener = object : WebSocketListener() {
