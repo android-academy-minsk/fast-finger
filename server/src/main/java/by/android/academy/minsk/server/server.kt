@@ -26,7 +26,10 @@ fun main(args: Array<String>) {
         install(WebSockets)
         routing {
             get("/") {
-                call.respondText("Hello World!", ContentType.Text.Plain)
+                call.respondText("Server's up and running", ContentType.Text.Plain)
+            }
+            get("/advertisement") {
+                call.respondText("\"Android Academy Minsk is the best. Join Android Academy today and get 99% discount.\"")
             }
 
             val clients = Collections.synchronizedSet(LinkedHashSet<ChatClient>())

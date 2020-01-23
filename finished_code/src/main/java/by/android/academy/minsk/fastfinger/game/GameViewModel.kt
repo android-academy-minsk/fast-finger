@@ -4,15 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.android.academy.minsk.fastfinger.ads.AdsApi
 import by.android.academy.minsk.fastfinger.score.ScoreRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameViewModel(
-    private val scoreRepository: ScoreRepository
+    private val scoreRepository: ScoreRepository,
+    private val adsApi: AdsApi
 ) : ViewModel() {
 
     private var score = 0
+
+    private val _advertisement = MutableLiveData<String>()
+    val advertisement: LiveData<String> = _advertisement
 
     private val _message = MutableLiveData<String>()
     val message: LiveData<String> get() = _message
@@ -77,6 +82,7 @@ class GameViewModel(
         viewModelScope.launch {
             val bestScore = scoreRepository.getBestLocalScore()
             setBestLocalScore(bestScore)
+            setupAdvertisement()
         }
     }
 
@@ -85,6 +91,14 @@ class GameViewModel(
             "Best score is $bestScore"
         } else {
             ""
+        }
+    }
+
+    private suspend fun setupAdvertisement() {
+        _advertisement.value = try {
+            adsApi.getAdvertisement()
+        } catch (t: Throwable) {
+            "error loading ad, enjoy!"
         }
     }
 }

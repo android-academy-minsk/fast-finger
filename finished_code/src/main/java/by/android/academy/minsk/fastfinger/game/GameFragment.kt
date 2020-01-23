@@ -54,6 +54,9 @@ class GameFragment : Fragment() {
         viewModel.bestLocalScore.observe(viewLifecycleOwner) {
             bestScore.text = it
         }
+        viewModel.advertisement.observe(viewLifecycleOwner) {
+            advertisement.text = it
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

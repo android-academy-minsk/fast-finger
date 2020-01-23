@@ -1,5 +1,6 @@
 package by.android.academy.minsk.fastfinger.chat
 
+import by.android.academy.minsk.fastfinger.WEB_SOCKET_SERVER_URL
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -37,7 +38,7 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
         .build()
 
     val request = Request.Builder()
-        .url("ws://10.0.2.2:8080/chat")
+        .url(WEB_SOCKET_SERVER_URL)
         .build()
 
     val webSocketListener = object : WebSocketListener() {

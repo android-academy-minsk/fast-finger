@@ -35,6 +35,9 @@ buildscript {
 
                 //network
                 "com.squareup.okhttp3:okhttp:4.3.1",
+                "com.squareup.retrofit2:retrofit:2.6.2",
+                "com.google.code.gson:gson:2.8.6",
+                "com.squareup.retrofit2:converter-gson:2.6.2",
         ]
         androidLibrariesKapt = [
                 "androidx.room:room-compiler:$room_version",
