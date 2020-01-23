@@ -17,7 +17,7 @@ sealed class Frame {
     data class ConnectionError(val errorMessage: String) : Frame()
 }
 
-fun connectWithRetry(): Flow<Frame> = connectToChat().flatMapConcat { frame ->
+fun connectWithRetry(): Flow<Frame> = connectToChat().flatMapLatest { frame ->
     when (frame) {
         is Frame.ConnectionError -> connectWithRetry().onStart {
             emit(frame)
@@ -61,7 +61,7 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-            if (code != 1001) {
+            if (!isClosedForSend) {
                 offer(Frame.ConnectionClosed(reason))
                 close()
             }
