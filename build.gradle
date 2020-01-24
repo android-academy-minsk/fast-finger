@@ -68,5 +68,5 @@ task clean(type: Delete) {
 }
 
 task ciCheck() {
-    dependsOn "finished_code:assembleDebug"
+    dependsOn "finished_code:assembleDebug", "server:assemble"
 }
