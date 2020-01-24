@@ -37,6 +37,11 @@ class ChatFragment : Fragment() {
                 updateMessages(it)
             }
         }
+        sendMessageButton.setOnClickListener {
+            val text = newMessageText.text.toString()
+            newMessageText.text?.clear()
+            chatViewModel.sendMessage(text)
+        }
     }
 
     private class MessageViewHolder(private val view: TextView) : RecyclerView.ViewHolder(view) {

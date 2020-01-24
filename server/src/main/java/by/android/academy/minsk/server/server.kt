@@ -45,6 +45,7 @@ fun main(args: Array<String>) {
                                 val text = frame.readText()
                                 // Iterate over all the connections
                                 val textToSend = "${client.name} said: $text"
+                                println(textToSend)
                                 for (other in clients.toList()) {
                                     other.session.outgoing.send(Frame.Text(textToSend))
                                 }

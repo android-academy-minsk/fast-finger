@@ -4,16 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
+
+    private val messageChannel = Channel<String>()
+
     private val _chatText = MutableLiveData<List<String>>(emptyList())
     val chatText: LiveData<List<String>> get() = _chatText
 
     init {
         viewModelScope.launch {
-            connectWithRetry().collect {
+            connectWithRetry(messageChannel).collect {
                 when (it) {
                     is Frame.Connecting -> addText("connecting")
                     is Frame.NewMessage -> addText(it.text)
@@ -25,6 +29,12 @@ class ChatViewModel : ViewModel() {
                     )
                 }
             }
+        }
+    }
+
+    fun sendMessage(text: String) {
+        viewModelScope.launch {
+            messageChannel.send(text)
         }
     }
 

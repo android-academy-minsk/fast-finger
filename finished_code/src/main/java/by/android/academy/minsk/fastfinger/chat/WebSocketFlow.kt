@@ -1,7 +1,7 @@
 package by.android.academy.minsk.fastfinger.chat
 
 import by.android.academy.minsk.fastfinger.WEB_SOCKET_SERVER_URL
-import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.*
@@ -17,22 +17,23 @@ sealed class Frame {
     data class ConnectionError(val errorMessage: String) : Frame()
 }
 
-fun connectWithRetry(): Flow<Frame> = connectToChat().flatMapLatest { frame ->
-    when (frame) {
-        is Frame.ConnectionError -> connectWithRetry().onStart {
-            emit(frame)
-            emit(Frame.ReconnectingIn(3))
-            delay(1000)
-            emit(Frame.ReconnectingIn(2))
-            delay(1000)
-            emit(Frame.ReconnectingIn(1))
-            delay(1000)
+fun connectWithRetry(messagesToSend: ReceiveChannel<String>): Flow<Frame> =
+    connectToChat(messagesToSend).flatMapLatest { frame ->
+        when (frame) {
+            is Frame.ConnectionError -> connectWithRetry(messagesToSend).onStart {
+                emit(frame)
+                emit(Frame.ReconnectingIn(3))
+                delay(1000)
+                emit(Frame.ReconnectingIn(2))
+                delay(1000)
+                emit(Frame.ReconnectingIn(1))
+                delay(1000)
+            }
+            else -> flowOf(frame)
         }
-        else -> flowOf(frame)
     }
-}
 
-fun connectToChat(): Flow<Frame> = callbackFlow {
+fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbackFlow {
     val client = OkHttpClient.Builder()
         .readTimeout(500, TimeUnit.MILLISECONDS)
         .build()
@@ -69,5 +70,11 @@ fun connectToChat(): Flow<Frame> = callbackFlow {
     }
     val socket = client.newWebSocket(request, webSocketListener)
     offer(Frame.Connecting)
-    awaitClose { socket.close(1001, "by client initiative") }
+    try {
+        for (message in messagesToSend) {
+            socket.send(message)
+        }
+    } finally {
+        socket.close(1001, "by client initiative")
+    }
 }
