@@ -94,6 +94,7 @@ class GameViewModel(
         }
     }
 
+    //TODO: handle errors in a good way
     private suspend fun setupAdvertisement() {
         _advertisement.value = try {
             adsApi.getAdvertisement()

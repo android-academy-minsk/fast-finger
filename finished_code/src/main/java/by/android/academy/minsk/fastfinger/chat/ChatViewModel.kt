@@ -16,6 +16,7 @@ class ChatViewModel : ViewModel() {
     val chatText: LiveData<List<String>> get() = _chatText
 
     init {
+        //TODO: get text in the right way
         viewModelScope.launch {
             connectWithRetry(messageChannel).collect {
                 when (it) {
@@ -32,6 +33,7 @@ class ChatViewModel : ViewModel() {
         }
     }
 
+    //TODO: what will be if call many times
     fun sendMessage(text: String) {
         viewModelScope.launch {
             messageChannel.send(text)

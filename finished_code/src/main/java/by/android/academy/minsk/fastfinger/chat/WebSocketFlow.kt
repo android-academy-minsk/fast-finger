@@ -2,6 +2,7 @@ package by.android.academy.minsk.fastfinger.chat
 
 import by.android.academy.minsk.fastfinger.WEB_SOCKET_SERVER_URL
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.*
