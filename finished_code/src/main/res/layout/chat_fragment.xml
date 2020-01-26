@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <EditText
         android:id="@+id/newMessageText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="@id/sendMessageButton"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/sendMessageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
