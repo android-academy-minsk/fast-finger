@@ -103,7 +103,7 @@ class GameViewModel(
     private suspend fun setupAdvertisement() {
         _advertisement.value = when (val ads = adsUseCase.showAds()) {
             is ShowAdsResult.ShowLoadedAdvertisement -> ads.text
-            is ShowAdsResult.ShowAdsLoadingError -> "error loading ads, enjoy!"
+            ShowAdsResult.ShowAdsLoadingError -> "error loading ads, enjoy!"
         }
     }
 }
