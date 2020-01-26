@@ -9,12 +9,18 @@ const val LOCAL_BEST_SCORE_ID = 0
 data class ScoreEntity(val value: Int, @PrimaryKey val id: Int)
 
 @Dao
-interface ScoreDao {
+abstract class ScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateScore(score: ScoreEntity)
+    protected abstract suspend fun updateScore(score: ScoreEntity)
 
-    @Query("select * from scores where id = :id")
-    suspend fun getScore(id: Int): ScoreEntity?
+    @Query("select value from scores where id = :id")
+    protected abstract suspend fun getScore(id: Int): Int?
+
+    suspend fun updateLocalBestScore(value: Int) {
+        updateScore(ScoreEntity(value, LOCAL_BEST_SCORE_ID))
+    }
+
+    suspend fun getLocalBestScore(): Int? = getScore(LOCAL_BEST_SCORE_ID)
 }
 
 @Database(entities = [ScoreEntity::class], version = 1, exportSchema = false)
