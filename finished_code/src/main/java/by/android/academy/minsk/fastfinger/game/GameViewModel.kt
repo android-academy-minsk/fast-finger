@@ -26,7 +26,7 @@ class GameViewModel(
     val button: LiveData<ButtonState> get() = _button
 
     private val _bestLocalScore = MutableLiveData("")
-    val bestLocalScore get() = _bestLocalScore
+    val bestLocalScore: LiveData<String> get() = _bestLocalScore
 
     fun onButtonClick() {
         when (button.value) {
