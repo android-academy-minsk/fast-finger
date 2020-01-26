@@ -44,6 +44,7 @@ class GameViewModel(
     }
 
     private fun onInGameClick() {
+        // TODO(3): game play itself
         score++
         _message.value = score.toString()
     }
@@ -57,6 +58,7 @@ class GameViewModel(
 
     private suspend fun prepareGame() {
         _button.value = ButtonState.STARTING
+        // TODO(1): ready and steady
         _message.value = "READY"
         delay(500)
         _message.value = "STEADY"
@@ -64,15 +66,17 @@ class GameViewModel(
     }
 
     private fun startGame() {
+        // TODO(2): start the game
         score = 0
         _message.value = "GO!"
         _button.value = ButtonState.GAME_IN_PROGRESS
     }
 
     private suspend fun finishGame() {
-        _message.value = "Your score is $score"
         val newBestLocalScore = scoreRepository.updateLocalBestScore(score)
         setBestLocalScore(newBestLocalScore)
+        // TODO(5): Finish the game
+        _message.value = "Your score is $score"
         _button.value = ButtonState.FINISHING
         delay(2000)
         _button.value = ButtonState.READY_TO_START
