@@ -5,7 +5,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-fun createAdsApi(): AdsApi {
+fun createAdsUseCase() = AdsUseCase(createAdsApi())
+
+private fun createAdsApi(): AdsApi {
     val okHttpClient = OkHttpClient.Builder()
         .build()
 

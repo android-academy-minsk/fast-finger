@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import by.android.academy.minsk.fastfinger.ads.AdsApi
+import by.android.academy.minsk.fastfinger.ads.AdsUseCase
+import by.android.academy.minsk.fastfinger.ads.ShowAdsResult
 import by.android.academy.minsk.fastfinger.score.ScoreUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameViewModel(
     private val scoreUseCase: ScoreUseCase,
-    private val adsApi: AdsApi
+    private val adsUseCase: AdsUseCase
 ) : ViewModel() {
 
     private var score = 0
@@ -100,10 +101,9 @@ class GameViewModel(
 
     //TODO: handle errors in a good way
     private suspend fun setupAdvertisement() {
-        _advertisement.value = try {
-            adsApi.getAdvertisement()
-        } catch (t: Throwable) {
-            "error loading ad, enjoy!"
+        _advertisement.value = when (val ads = adsUseCase.showAds()) {
+            is ShowAdsResult.ShowLoadedAdvertisement -> ads.text
+            is ShowAdsResult.ShowAdsLoadingError -> "error loading ads, enjoy!"
         }
     }
 }
