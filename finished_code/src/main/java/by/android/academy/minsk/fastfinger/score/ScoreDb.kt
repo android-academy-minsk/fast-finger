@@ -6,18 +6,18 @@ import androidx.room.*
 const val LOCAL_BEST_SCORE_ID = 0
 
 @Entity(tableName = "scores")
-data class ScoreRecord(val value: Int, @PrimaryKey val id: Int)
+data class ScoreEntity(val value: Int, @PrimaryKey val id: Int)
 
 @Dao
 interface ScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateScore(score: ScoreRecord)
+    suspend fun updateScore(score: ScoreEntity)
 
     @Query("select * from scores where id = :id")
-    suspend fun getScore(id: Int): ScoreRecord?
+    suspend fun getScore(id: Int): ScoreEntity?
 }
 
-@Database(entities = [ScoreRecord::class], version = 1, exportSchema = false)
+@Database(entities = [ScoreEntity::class], version = 1, exportSchema = false)
 abstract class ScoreDb : RoomDatabase() {
     abstract val scoreDao: ScoreDao
 }

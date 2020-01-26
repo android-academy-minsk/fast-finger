@@ -7,7 +7,7 @@ class ScoreRepository(private val dao: ScoreDao) {
     suspend fun updateLocalBestScore(score: Int): Int {
         val currentBestScore = getBestLocalScore()
         if (score > currentBestScore) {
-            dao.updateScore(ScoreRecord(value = score, id = LOCAL_BEST_SCORE_ID))
+            dao.updateScore(ScoreEntity(value = score, id = LOCAL_BEST_SCORE_ID))
             return score
         }
         return currentBestScore
