@@ -74,9 +74,11 @@ class GameViewModel(
     }
 
     private suspend fun finishGame() {
-        val newBestLocalScore = bestScoreUseCase.updateLocalBestScore(score)
+        // TODO(8): pass score to logic
+        val newBestLocalScore = bestScoreUseCase.checkAndSaveBestScore(score)
+        // TODO(9): update ui with new best score (use setBestLocalScore function)
         setBestLocalScore(newBestLocalScore)
-        // TODO(5): Finish the game
+        // TODO(4): Finish the game
         _message.value = "Your score is $score"
         _button.value = ButtonState.FINISHING
         delay(2000)
@@ -85,6 +87,7 @@ class GameViewModel(
 
     fun onScreenOpen() {
         viewModelScope.launch {
+            // TODO(10): show best score when user open screen
             val bestScore = bestScoreUseCase.getBestLocalScore()
             setBestLocalScore(bestScore)
             setupAdvertisement()
