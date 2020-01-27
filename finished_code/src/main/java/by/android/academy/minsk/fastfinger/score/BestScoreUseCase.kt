@@ -1,6 +1,6 @@
 package by.android.academy.minsk.fastfinger.score
 
-class ScoreUseCase(private val dao: ScoreDao) {
+class BestScoreUseCase(private val dao: ScoreDao) {
 
     suspend fun getBestLocalScore(): Int = dao.getLocalBestScore() ?: 0
 

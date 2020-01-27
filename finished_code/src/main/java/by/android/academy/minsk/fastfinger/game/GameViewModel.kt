@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.android.academy.minsk.fastfinger.ads.AdsUseCase
 import by.android.academy.minsk.fastfinger.ads.ShowAdsResult
-import by.android.academy.minsk.fastfinger.score.ScoreUseCase
+import by.android.academy.minsk.fastfinger.score.BestScoreUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameViewModel(
-    private val scoreUseCase: ScoreUseCase,
+    private val bestScoreUseCase: BestScoreUseCase,
     private val adsUseCase: AdsUseCase
 ) : ViewModel() {
 
@@ -74,7 +74,7 @@ class GameViewModel(
     }
 
     private suspend fun finishGame() {
-        val newBestLocalScore = scoreUseCase.updateLocalBestScore(score)
+        val newBestLocalScore = bestScoreUseCase.updateLocalBestScore(score)
         setBestLocalScore(newBestLocalScore)
         // TODO(5): Finish the game
         _message.value = "Your score is $score"
@@ -85,7 +85,7 @@ class GameViewModel(
 
     fun onScreenOpen() {
         viewModelScope.launch {
-            val bestScore = scoreUseCase.getBestLocalScore()
+            val bestScore = bestScoreUseCase.getBestLocalScore()
             setBestLocalScore(bestScore)
             setupAdvertisement()
         }
