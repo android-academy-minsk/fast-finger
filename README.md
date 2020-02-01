@@ -2,7 +2,7 @@
 We usually experience difficulties with the Internet connection,
 so that it's highly recommended to download all dependencies in advance.
 
-MacOs or Linux
+macOS or Linux
 ```
 ./gradlew prepareForWorkshop
 ```
@@ -12,7 +12,7 @@ gradlew.bat prepareForWorkshop
 ```
 
 ## Start local server
-MacOs, Linux
+macOS, Linux
 ```
 ./gradlew server:run --console=plain
 ```
