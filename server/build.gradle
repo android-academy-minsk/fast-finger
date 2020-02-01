@@ -1,4 +1,5 @@
 apply plugin: "kotlin"
+apply plugin: "application"
 
 group 'kotlin-coroutines-workshop'
 version '1.0-SNAPSHOT'
@@ -22,4 +23,9 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+mainClassName = "by.android.academy.minsk.server.ServerKt"
+run {
+    standardInput = System.in
 }

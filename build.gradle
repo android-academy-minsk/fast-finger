@@ -67,6 +67,14 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-task ciCheck() {
+task buildEverything() {
     dependsOn "finished_code:assembleDebug", "server:assemble"
+}
+
+task ciCheck() {
+    dependsOn buildEverything
+}
+
+task prepareForWorkshop() {
+    dependsOn buildEverything
 }
