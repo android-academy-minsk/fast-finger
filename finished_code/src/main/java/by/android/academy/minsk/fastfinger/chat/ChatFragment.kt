@@ -11,6 +11,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.android.academy.minsk.fastfinger.R
+import by.android.academy.minsk.fastfinger.android.AndroidResourceManager
 import kotlinx.android.synthetic.main.chat_fragment.*
 
 class ChatFragment : Fragment() {
@@ -25,7 +26,7 @@ class ChatFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         chatViewModel = ViewModelProviders.of(
-            this
+            this, chatViewModelFactory(AndroidResourceManager(resources))
         ).get(ChatViewModel::class.java)
     }
 

@@ -4,16 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.android.academy.minsk.fastfinger.R
 import by.android.academy.minsk.fastfinger.ads.AdsUseCase
 import by.android.academy.minsk.fastfinger.ads.ShowAdsResult
+import by.android.academy.minsk.fastfinger.android.AndroidResourceManager
 import by.android.academy.minsk.fastfinger.score.BestScoreUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GameViewModel(
     private val bestScoreUseCase: BestScoreUseCase,
-    private val adsUseCase: AdsUseCase
-) : ViewModel() {
+    private val adsUseCase: AdsUseCase,
+    private val resource: AndroidResourceManager) : ViewModel() {
 
     private var score = 0
 
@@ -60,16 +62,16 @@ class GameViewModel(
     private suspend fun prepareGame() {
         _button.value = ButtonState.STARTING
         // TODO(1): ready and steady
-        _message.value = "READY"
+        _message.value = resource.getString(R.string.game_progress_type_ready)
         delay(500)
-        _message.value = "STEADY"
+        _message.value = resource.getString(R.string.game_progress_type_steady)
         delay(500)
     }
 
     private fun startGame() {
         // TODO(2): start the game
         score = 0
-        _message.value = "GO!"
+        _message.value = resource.getString(R.string.game_progress_type_go)
         _button.value = ButtonState.GAME_IN_PROGRESS
     }
 
@@ -79,7 +81,7 @@ class GameViewModel(
         // TODO(9): update ui with new best score (use setBestLocalScore function)
         setBestLocalScore(newBestLocalScore)
         // TODO(4): Finish the game
-        _message.value = "Your score is $score"
+        _message.value = resource.getString(R.string.game_your_score) + "$score"
         _button.value = ButtonState.FINISHING
         delay(2000)
         _button.value = ButtonState.READY_TO_START
@@ -96,7 +98,7 @@ class GameViewModel(
 
     private fun setBestLocalScore(bestScore: Int) {
         _bestLocalScore.value = if (bestScore > 0) {
-            "Best score is $bestScore"
+            resource.getString(R.string.game_your_best_score) + "$bestScore"
         } else {
             ""
         }
@@ -106,7 +108,7 @@ class GameViewModel(
         //TODO(13): show advertisement on ui using _advertisement
         _advertisement.value = when (val ads = adsUseCase.showAds()) {
             is ShowAdsResult.ShowLoadedAdvertisement -> ads.text
-            ShowAdsResult.ShowAdsLoadingError -> "error loading ads, enjoy!"
+            ShowAdsResult.ShowAdsLoadingError -> resource.getString(R.string.error_loading_ads)
         }
     }
 }
