@@ -31,10 +31,16 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        messages.layoutManager = LinearLayoutManager(context!!)
-        messages.adapter = MessagesAdapter().apply {
-            chatViewModel.chatText.observe(viewLifecycleOwner) {
-                updateMessages(it)
+        val linearLayoutManager = LinearLayoutManager(context!!)
+        messages.layoutManager = linearLayoutManager
+        val adapter = MessagesAdapter()
+        messages.adapter = adapter
+        chatViewModel.chatText.observe(viewLifecycleOwner) {
+            val needToScroll =
+                linearLayoutManager.findLastVisibleItemPosition() > adapter.messages.size - 3
+            adapter.messages = it
+            if (needToScroll) {
+                messages.smoothScrollToPosition(it.size)
             }
         }
         sendMessageButton.setOnClickListener {
@@ -52,12 +58,13 @@ class ChatFragment : Fragment() {
 
     private inner class MessagesAdapter : RecyclerView.Adapter<MessageViewHolder>() {
 
-        private var messages = emptyList<String>()
-
-        fun updateMessages(messages: List<String>) {
-            this.messages = messages
-            notifyDataSetChanged()
-        }
+        private var _messages = emptyList<String>()
+        var messages
+            get() = _messages
+            set(value) {
+                _messages = value
+                notifyDataSetChanged()
+            }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
             val view = LayoutInflater.from(context).inflate(R.layout.message_view, parent, false)
