@@ -18,11 +18,14 @@ class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() 
     val chatText: LiveData<List<String>> get() = _chatText
 
     init {
+        //TODO(15): collect and show frames
+        //TODO(17): use reconnect
         viewModelScope.launch {
-            //TODO(15): collect and show frames
-            connectWithRetry(messageChannel).collect {
-                showFrame(it)
-            }
+            connectToChat(messageChannel)
+                .reconnect()
+                .collect {
+                    showFrame(it)
+                }
         }
     }
 

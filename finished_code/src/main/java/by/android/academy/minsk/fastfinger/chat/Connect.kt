@@ -2,9 +2,8 @@ package by.android.academy.minsk.fastfinger.chat
 
 import by.android.academy.minsk.fastfinger.WEB_SOCKET_SERVER_URL
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.TimeUnit
@@ -17,22 +16,6 @@ sealed class Frame {
     data class ReconnectingIn(val seconds: Int) : Frame()
     data class ConnectionError(val errorMessage: String) : Frame()
 }
-
-fun connectWithRetry(messagesToSend: ReceiveChannel<String>): Flow<Frame> =
-    connectToChat(messagesToSend).flatMapLatest { frame ->
-        when (frame) {
-            is Frame.ConnectionError -> connectWithRetry(messagesToSend).onStart {
-                emit(frame)
-                emit(Frame.ReconnectingIn(3))
-                delay(1000)
-                emit(Frame.ReconnectingIn(2))
-                delay(1000)
-                emit(Frame.ReconnectingIn(1))
-                delay(1000)
-            }
-            else -> flowOf(frame)
-        }
-    }
 
 fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbackFlow {
     val client = OkHttpClient.Builder()
