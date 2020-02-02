@@ -14,8 +14,8 @@
     <string name="error_loading_ads">error loading ads, enjoy!</string>
 
     <string name="state_connecting">connecting</string>
-    <string name="state_reconnecting">reconnecting</string>
+    <string name="state_reconnecting">reconnecting in %1$s seconds</string>
     <string name="state_connected">connected</string>
-    <string name="state_connection_closed">connection was closed: </string>
+    <string name="state_connection_closed">connection was closed: %1$s</string>
     <string name="state_unknown_reason">unknown reason</string>
 </resources>

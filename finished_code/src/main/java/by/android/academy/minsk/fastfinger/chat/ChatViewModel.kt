@@ -18,22 +18,30 @@ class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() 
     val chatText: LiveData<List<String>> get() = _chatText
 
     init {
-        //TODO: get text in the right way
         viewModelScope.launch {
             connectWithRetry(messageChannel).collect {
-                when (it) {
-                    is Frame.Connecting -> addText(resource.getString(R.string.state_connecting))
-                    is Frame.NewMessage -> addText(it.text)
-                    is Frame.ConnectionError -> addText(it.errorMessage)
-                    is Frame.ReconnectingIn -> addText(resource.getString(R.string.state_reconnecting) + " " + "${it.seconds}")
-                    is Frame.Connected -> addText(resource.getString(R.string.state_connected))
-                    is Frame.ConnectionClosed -> addText(
-                        resource.getString(R.string.state_connection_closed)
-                                + (it.reason ?: resource.getString(R.string.state_unknown_reason))
-                    )
-                }
+                showFrame(it)
             }
         }
+    }
+
+    private fun showFrame(frame: Frame) {
+        val textToShow = when (frame) {
+            is Frame.Connecting -> resource.getString(R.string.state_connecting)
+            is Frame.NewMessage -> frame.text
+            is Frame.ConnectionError -> frame.errorMessage
+            is Frame.ReconnectingIn -> resource.getString(
+                R.string.state_reconnecting,
+                frame.seconds
+            )
+            is Frame.Connected -> resource.getString(R.string.state_connected)
+            is Frame.ConnectionClosed ->
+                resource.getString(
+                    R.string.state_connection_closed, frame.reason
+                        ?: resource.getString(R.string.state_unknown_reason)
+                )
+        }
+        addText(textToShow)
     }
 
     //TODO: what will be if call many times
