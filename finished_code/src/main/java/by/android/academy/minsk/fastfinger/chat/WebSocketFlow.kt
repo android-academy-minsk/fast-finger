@@ -46,30 +46,37 @@ fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbac
     val webSocketListener = object : WebSocketListener() {
 
         override fun onOpen(webSocket: WebSocket, response: Response) {
+            //TODO(14): offer a frame
             offer(Frame.Connected)
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
+            //TODO(14): offer a frame
             offer(Frame.NewMessage(text))
         }
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
-            offer(Frame.NewMessage(bytes.hex()))
+            val text = bytes.hex()
+            //TODO(14): offer a frame
+            offer(Frame.NewMessage(text))
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+            //TODO(14): offer a frame
             offer(Frame.ConnectionError(t.message ?: "failed with unknown reason"))
             close()
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             if (!isClosedForSend) {
+                //TODO(14): offer a frame
                 offer(Frame.ConnectionClosed(reason))
                 close()
             }
         }
     }
     val socket = client.newWebSocket(request, webSocketListener)
+    //TODO(14): offer a frame
     offer(Frame.Connecting)
     try {
         for (message in messagesToSend) {
