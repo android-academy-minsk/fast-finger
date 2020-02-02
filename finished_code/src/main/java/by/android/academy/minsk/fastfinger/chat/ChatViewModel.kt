@@ -19,6 +19,7 @@ class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() 
 
     init {
         viewModelScope.launch {
+            //TODO(15): collect and show frames
             connectWithRetry(messageChannel).collect {
                 showFrame(it)
             }
