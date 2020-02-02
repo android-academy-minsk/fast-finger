@@ -81,7 +81,7 @@ class GameViewModel(
         // TODO(9): update ui with new best score (use setBestLocalScore function)
         setBestLocalScore(newBestLocalScore)
         // TODO(4): Finish the game
-        _message.value = resource.getString(R.string.game_your_score) + "$score"
+        _message.value = resource.getString(R.string.game_your_score, score)
         _button.value = ButtonState.FINISHING
         delay(2000)
         _button.value = ButtonState.READY_TO_START
@@ -98,7 +98,7 @@ class GameViewModel(
 
     private fun setBestLocalScore(bestScore: Int) {
         _bestLocalScore.value = if (bestScore > 0) {
-            resource.getString(R.string.game_your_best_score) + "$bestScore"
+            resource.getString(R.string.game_your_best_score, bestScore)
         } else {
             ""
         }

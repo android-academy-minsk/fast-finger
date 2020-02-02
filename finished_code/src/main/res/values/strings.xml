@@ -8,8 +8,8 @@
     <string name="game_progress_type_ready">READY</string>
     <string name="game_progress_type_steady">STEADY</string>
     <string name="game_progress_type_go">GO!</string>
-    <string name="game_your_score">Your score is</string>
-    <string name="game_your_best_score">Best score is</string>
+    <string name="game_your_score">Your score is %1$s</string>
+    <string name="game_your_best_score">Best score is %1$s</string>
 
     <string name="error_loading_ads">error loading ads, enjoy!</string>
 
