@@ -2,8 +2,10 @@ package by.android.academy.minsk.fastfinger.chat
 
 import by.android.academy.minsk.fastfinger.WEB_SOCKET_SERVER_URL
 import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.TimeUnit
@@ -61,11 +63,13 @@ fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbac
     val socket = client.newWebSocket(request, webSocketListener)
     //TODO(14): offer a frame
     offer(Frame.Connecting)
-    try {
+    //TODO(19): from channel to socket
+    launch {
         for (message in messagesToSend) {
             socket.send(message)
         }
-    } finally {
+    }
+    awaitClose {
         socket.close(1001, "by client initiative")
     }
 }
