@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import by.android.academy.minsk.fastfinger.R
+import by.android.academy.minsk.fastfinger.android.AndroidResourceManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() {
 
     private val messageChannel = Channel<String>()
 
@@ -20,13 +22,14 @@ class ChatViewModel : ViewModel() {
         viewModelScope.launch {
             connectWithRetry(messageChannel).collect {
                 when (it) {
-                    is Frame.Connecting -> addText("connecting")
+                    is Frame.Connecting -> addText(resource.getString(R.string.state_connecting))
                     is Frame.NewMessage -> addText(it.text)
                     is Frame.ConnectionError -> addText(it.errorMessage)
-                    is Frame.ReconnectingIn -> addText("reconnecting in ${it.seconds}")
-                    is Frame.Connected -> addText("connected")
+                    is Frame.ReconnectingIn -> addText(resource.getString(R.string.state_reconnecting) + " " + "${it.seconds}")
+                    is Frame.Connected -> addText(resource.getString(R.string.state_connected))
                     is Frame.ConnectionClosed -> addText(
-                        "connection was closed: ${it.reason ?: "unknown reason"}"
+                        resource.getString(R.string.state_connection_closed)
+                                + (it.reason ?: resource.getString(R.string.state_unknown_reason))
                     )
                 }
             }
