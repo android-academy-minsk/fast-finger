@@ -1,2 +1,2 @@
-include ':finished_code', ':server'
+include ':finished_code', ':server', ':start'
 rootProject.name='Fast finger'
