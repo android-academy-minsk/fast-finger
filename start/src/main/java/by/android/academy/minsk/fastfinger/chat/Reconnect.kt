@@ -1,4 +1,6 @@
 package by.android.academy.minsk.fastfinger.chat
 
-//TODO(16): reconnect imperative
-//TODO(16): reconnect declarative
+import kotlinx.coroutines.flow.Flow
+
+//TODO(16): reconnect imperative or dclarative
+fun Flow<Frame>.reconnect(): Flow<Frame> = TODO()

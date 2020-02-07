@@ -41,11 +41,9 @@ class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() 
         addText(textToShow)
     }
 
-    //TODO(18): send messages to channel
+
     fun sendMessage(text: String) {
-        viewModelScope.launch {
-            messageChannel.send(text)
-        }
+        //TODO(18): send messages to messageChannel
     }
 
     private fun addText(text: String) {
