@@ -1,0 +1,1 @@
+./gradlew server:run --console=plain --offline
