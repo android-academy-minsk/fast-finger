@@ -53,6 +53,7 @@ class GameViewModel(
     private suspend fun launchGame() {
         prepareGame()
         startGame()
+        delay(5000)
         finishGame()
     }
 

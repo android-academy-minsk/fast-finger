@@ -1,6 +1,7 @@
 package by.android.academy.minsk.fastfinger.chat
 
 import by.android.academy.minsk.fastfinger.WEB_SOCKET_SERVER_URL
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +19,7 @@ sealed class Frame {
     data class ConnectionError(val errorMessage: String) : Frame()
 }
 
-fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbackFlow {
+fun connectToChat(messagesToSend: ReceiveChannel<String> = Channel()): Flow<Frame> = callbackFlow {
     val client = OkHttpClient.Builder()
         .readTimeout(500, TimeUnit.MILLISECONDS)
         .build()
