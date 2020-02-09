@@ -5,7 +5,6 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.ByteString
 import java.util.concurrent.TimeUnit
@@ -35,12 +34,16 @@ fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbac
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
-            //TODO(14): offer a frame
+            if (text.isNotEmpty()) {
+                //TODO(14): offer a frame
+            }
         }
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             val text = bytes.hex()
-            //TODO(14): offer a frame
+            if (text.isNotEmpty()) {
+                //TODO(14): offer a frame
+            }
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {

@@ -36,14 +36,18 @@ fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbac
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
-            //TODO(14): offer a frame
-            offer(Frame.NewMessage(text))
+            if (text.isNotEmpty()) {
+                //TODO(14): offer a frame
+                offer(Frame.NewMessage(text))
+            }
         }
 
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             val text = bytes.hex()
-            //TODO(14): offer a frame
-            offer(Frame.NewMessage(text))
+            if (text.isEmpty()) {
+                //TODO(14): offer a frame
+                offer(Frame.NewMessage(text))
+            }
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
