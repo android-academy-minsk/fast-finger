@@ -77,7 +77,7 @@ task buildEverything() {
 }
 
 task ciCheck() {
-    dependsOn buildEverything
+    dependsOn buildEverything, "finished_code:testDebugUnitTest"
 }
 
 task prepareForWorkshop() {
