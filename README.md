@@ -14,9 +14,9 @@ gradlew.bat prepareForWorkshop
 ## Start local server
 macOS, Linux
 ```
-./gradlew server:run --console=plain
+./server.sh
 ```
 Windows
 ```
-gradlew.bat server:run --console=plain
+server.bat
 ```
