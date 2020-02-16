@@ -65,7 +65,7 @@ class GameViewModel(
         // TODO(2): start the game
     }
 
-    private suspend fun finishGame() {
+    private fun finishGame() {
         // TODO(8): pass score to logic
         // TODO(9): update ui with new best score (use setBestLocalScore function)
         // TODO(4): Finish the game
