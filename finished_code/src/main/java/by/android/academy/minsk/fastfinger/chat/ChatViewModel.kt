@@ -18,8 +18,8 @@ class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() 
     val chatText: LiveData<List<String>> get() = _chatText
 
     init {
-        //TODO(15): collect and show frames
-        //TODO(17): use reconnect
+        //!!!it's the FINISHED project, switch search to start module!!! TODO(15): collect and show frames
+        //!!!it's the FINISHED project, switch search to start module!!! TODO(17): use reconnect
         viewModelScope.launch {
             connectToChat(messageChannel)
                 .reconnect()
@@ -48,7 +48,7 @@ class ChatViewModel(private val resource: AndroidResourceManager) : ViewModel() 
         addText(textToShow)
     }
 
-    //TODO(18): send messages to channel
+    //!!!it's the FINISHED project, switch search to start module!!! TODO(18): send messages to channel
     fun sendMessage(text: String) {
         viewModelScope.launch {
             messageChannel.send(text)

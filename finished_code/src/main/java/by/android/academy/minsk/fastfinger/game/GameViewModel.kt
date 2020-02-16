@@ -47,7 +47,7 @@ class GameViewModel(
     }
 
     private fun onInGameClick() {
-        // TODO(3): game play itself
+        // !!!it's the FINISHED project, switch search to start module!!! TODO(3): game play itself
         score++
         _message.value = score.toString()
     }
@@ -61,7 +61,7 @@ class GameViewModel(
 
     private suspend fun prepareGame() {
         _button.value = ButtonState.STARTING
-        // TODO(1): ready and steady
+        // !!!it's the FINISHED project, switch search to start module!!! TODO(1): ready and steady
         _message.value = resource.getString(R.string.game_progress_type_ready)
         delay(500)
         _message.value = resource.getString(R.string.game_progress_type_steady)
@@ -69,18 +69,18 @@ class GameViewModel(
     }
 
     private fun startGame() {
-        // TODO(2): start the game
+        // !!!it's the FINISHED project, switch search to start module!!! TODO(2): start the game
         score = 0
         _message.value = resource.getString(R.string.game_progress_type_go)
         _button.value = ButtonState.GAME_IN_PROGRESS
     }
 
     private suspend fun finishGame() {
-        // TODO(8): pass score to logic
+        // !!!it's the FINISHED project, switch search to start module!!! TODO(8): pass score to logic
         val newBestLocalScore = bestScoreUseCase.checkAndSaveBestScore(score)
-        // TODO(9): update ui with new best score (use setBestLocalScore function)
+        // !!!it's the FINISHED project, switch search to start module!!! TODO(9): update ui with new best score (use setBestLocalScore function)
         setBestLocalScore(newBestLocalScore)
-        // TODO(4): Finish the game
+        // !!!it's the FINISHED project, switch search to start module!!! TODO(4): Finish the game
         _message.value = resource.getString(R.string.game_your_score, score)
         _button.value = ButtonState.FINISHING
         delay(2000)
@@ -89,7 +89,7 @@ class GameViewModel(
 
     fun onScreenOpen() {
         viewModelScope.launch {
-            // TODO(10): show best score when user open screen
+            // !!!it's the FINISHED project, switch search to start module!!! TODO(10): show best score when user open screen
             val bestScore = bestScoreUseCase.getBestLocalScore()
             setBestLocalScore(bestScore)
             setupAdvertisement()
@@ -105,7 +105,7 @@ class GameViewModel(
     }
 
     private suspend fun setupAdvertisement() {
-        //TODO(13): show advertisement on ui using _advertisement
+        //!!!it's the FINISHED project, switch search to start module!!! TODO(13): show advertisement on ui using _advertisement
         _advertisement.value = when (val ads = adsUseCase.showAds()) {
             is ShowAdsResult.ShowLoadedAdvertisement -> ads.text
             ShowAdsResult.ShowAdsLoadingError -> resource.getString(R.string.error_loading_ads)

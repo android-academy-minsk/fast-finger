@@ -8,7 +8,7 @@ const val LOCAL_BEST_SCORE_ID = 0
 @Entity(tableName = "scores")
 data class ScoreEntity(val value: Int, @PrimaryKey val id: Int)
 
-//TODO(5): coroutines integration
+//!!!it's the FINISHED project, switch search to start module!!! TODO(5): coroutines integration
 @Dao
 abstract class ScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

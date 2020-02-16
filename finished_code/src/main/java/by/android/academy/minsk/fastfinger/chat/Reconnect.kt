@@ -3,7 +3,7 @@ package by.android.academy.minsk.fastfinger.chat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
-//TODO(16): reconnect imperative
+//!!!it's the FINISHED project, switch search to start module!!! TODO(16): reconnect imperative
 fun Flow<Frame>.reconnect(): Flow<Frame> {
     val sourceFlow = this
     return flow {
@@ -20,7 +20,7 @@ fun Flow<Frame>.reconnect(): Flow<Frame> {
     }
 }
 
-//TODO(16): reconnect declarative
+//!!!it's the FINISHED project, switch search to start module!!! TODO(16): reconnect declarative
 fun Flow<Frame>.reconnectRx(): Flow<Frame> = flatMapLatest { frame ->
     when (frame) {
         is Frame.ConnectionError -> reconnectRx().onStart {

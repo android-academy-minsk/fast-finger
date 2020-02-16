@@ -31,13 +31,13 @@ fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbac
     val webSocketListener = object : WebSocketListener() {
 
         override fun onOpen(webSocket: WebSocket, response: Response) {
-            //TODO(14): offer a frame
+            //!!!it's the FINISHED project, switch search to start module!!! TODO(14): offer a frame
             offer(Frame.Connected)
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
             if (text.isNotEmpty()) {
-                //TODO(14): offer a frame
+                //!!!it's the FINISHED project, switch search to start module!!! TODO(14): offer a frame
                 offer(Frame.NewMessage(text))
             }
         }
@@ -45,29 +45,29 @@ fun connectToChat(messagesToSend: ReceiveChannel<String>): Flow<Frame> = callbac
         override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
             val text = bytes.hex()
             if (text.isEmpty()) {
-                //TODO(14): offer a frame
+                //!!!it's the FINISHED project, switch search to start module!!! TODO(14): offer a frame
                 offer(Frame.NewMessage(text))
             }
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-            //TODO(14): offer a frame
+            //!!!it's the FINISHED project, switch search to start module!!! TODO(14): offer a frame
             offer(Frame.ConnectionError(t.message ?: "failed with unknown reason"))
             close()
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             if (!isClosedForSend) {
-                //TODO(14): offer a frame
+                //!!!it's the FINISHED project, switch search to start module!!! TODO(14): offer a frame
                 offer(Frame.ConnectionClosed(reason))
                 close()
             }
         }
     }
     val socket = client.newWebSocket(request, webSocketListener)
-    //TODO(14): offer a frame
+    //!!!it's the FINISHED project, switch search to start module!!! TODO(14): offer a frame
     offer(Frame.Connecting)
-    //TODO(19): from channel to socket
+    //!!!it's the FINISHED project, switch search to start module!!! TODO(19): from channel to socket
     launch {
         for (message in messagesToSend) {
             socket.send(message)
