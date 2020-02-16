@@ -72,12 +72,8 @@ class GameViewModel(
     }
 
     fun onScreenOpen() {
-        viewModelScope.launch {
-            // TODO(10): show best score when user open screen
-        }
-        viewModelScope.launch {
-            setupAdvertisement()
-        }
+        // TODO(10): show best score when user open screen
+        // TODO(13): show advertisement on ui using _advertisement
     }
 
     private fun setBestLocalScore(bestScore: Int) {
@@ -86,10 +82,6 @@ class GameViewModel(
         } else {
             ""
         }
-    }
-
-    private suspend fun setupAdvertisement() {
-        //TODO(13): show advertisement on ui using _advertisement
     }
 }
 
