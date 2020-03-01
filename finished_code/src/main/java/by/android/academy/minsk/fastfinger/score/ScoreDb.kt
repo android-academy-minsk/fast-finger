@@ -17,7 +17,7 @@ abstract class ScoreDao {
     @Query("select value from scores where id = :id")
     protected abstract suspend fun getScore(id: Int): Int?
 
-    suspend fun updateLocalBestScore(value: Int) {
+    open suspend fun updateLocalBestScore(value: Int) {
         updateScore(ScoreEntity(value, LOCAL_BEST_SCORE_ID))
     }
 
