@@ -17,6 +17,18 @@ class BestScoreUseCaseTest {
     }
 
     @Test
+    fun `should get best score from dao`() = runBlocking<Unit> {
+        // arrange
+        whenever(scoreDaoMock.getLocalBestScore())
+            .thenReturn(33)
+        // act
+        val result = subject.getBestLocalScore()
+        // assert
+        assertEquals(33, result)
+        verify(scoreDaoMock).getLocalBestScore()
+    }
+
+    @Test
     fun `default best score should be 0`() = runBlocking<Unit> {
         whenever(scoreDaoMock.getLocalBestScore())
             .thenReturn(null)
