@@ -42,15 +42,25 @@ class BestScoreUseCaseTest {
     @Test
     fun `save best score`() = runBlocking<Unit> {
         //arrange
-        val scoreDoaMock: ScoreDao = mock()
-        whenever(scoreDoaMock.getLocalBestScore())
+        whenever(scoreDaoMock.getLocalBestScore())
             .thenReturn(13)
-        val subject = BestScoreUseCase(scoreDoaMock)
         //act
         val result = subject.checkAndSaveBestScore(42)
         //assert
         assertEquals(42, result)
-        verify(scoreDoaMock).getLocalBestScore()
-        verify(scoreDoaMock).updateLocalBestScore(eq(42))
+        verify(scoreDaoMock).getLocalBestScore()
+        verify(scoreDaoMock).updateLocalBestScore(eq(42))
+    }
+
+    @Test
+    fun `shouldn't save not best score`() = runBlocking<Unit> {
+        //arrange
+        whenever(scoreDaoMock.getLocalBestScore())
+            .thenReturn(33)
+        //act
+        val result = subject.checkAndSaveBestScore(25)
+        //assert
+        assertEquals(33, result)
+        verify(scoreDaoMock).getLocalBestScore()
     }
 }
