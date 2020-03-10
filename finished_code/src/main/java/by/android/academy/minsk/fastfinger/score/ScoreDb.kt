@@ -10,23 +10,28 @@ data class ScoreEntity(val value: Int, @PrimaryKey val id: Int)
 
 //!!!it's the FINISHED project, switch search to start module!!! TODO(5): coroutines integration
 @Dao
-abstract class ScoreDao {
+abstract class ScoreDaoImpl : ScoreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     protected abstract suspend fun updateScore(score: ScoreEntity)
 
     @Query("select value from scores where id = :id")
     protected abstract suspend fun getScore(id: Int): Int?
 
-    open suspend fun updateLocalBestScore(value: Int) {
+    override suspend fun updateLocalBestScore(value: Int) {
         updateScore(ScoreEntity(value, LOCAL_BEST_SCORE_ID))
     }
 
-    suspend fun getLocalBestScore(): Int? = getScore(LOCAL_BEST_SCORE_ID)
+    override suspend fun getLocalBestScore(): Int? = getScore(LOCAL_BEST_SCORE_ID)
+}
+
+interface ScoreDao {
+    suspend fun getLocalBestScore(): Int?
+    suspend fun updateLocalBestScore(value: Int)
 }
 
 @Database(entities = [ScoreEntity::class], version = 1, exportSchema = false)
 abstract class ScoreDb : RoomDatabase() {
-    abstract val scoreDao: ScoreDao
+    abstract val scoreDao: ScoreDaoImpl
 }
 
 private lateinit var INSTANCE: ScoreDb
