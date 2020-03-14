@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class BestScoreUseCaseTest {
 
     private val scoreDaoMock = mock<ScoreDao>()
-    private val subject = BestScoreUseCase(scoreDaoMock)
+    private val sut = BestScoreUseCase(scoreDaoMock)
 
     @After
     fun checkNoMoreInteractions() {
@@ -22,7 +22,7 @@ class BestScoreUseCaseTest {
         whenever(scoreDaoMock.getLocalBestScore())
             .thenReturn(33)
         // act
-        val result = subject.getBestLocalScore()
+        val result = sut.getBestLocalScore()
         // assert
         assertEquals(33, result)
         verify(scoreDaoMock).getLocalBestScore()
@@ -30,11 +30,12 @@ class BestScoreUseCaseTest {
 
     @Test
     fun `default best score should be 0`() = runBlocking<Unit> {
+        // arrange
         whenever(scoreDaoMock.getLocalBestScore())
             .thenReturn(null)
-
-        val result = subject.getBestLocalScore()
-
+        // act
+        val result = sut.getBestLocalScore()
+        // assert
         assertEquals(0, result)
         verify(scoreDaoMock).getLocalBestScore()
     }
@@ -45,7 +46,7 @@ class BestScoreUseCaseTest {
         whenever(scoreDaoMock.getLocalBestScore())
             .thenReturn(13)
         //act
-        val result = subject.checkAndSaveBestScore(42)
+        val result = sut.checkAndSaveBestScore(42)
         //assert
         assertEquals(42, result)
         verify(scoreDaoMock).getLocalBestScore()
@@ -58,7 +59,7 @@ class BestScoreUseCaseTest {
         whenever(scoreDaoMock.getLocalBestScore())
             .thenReturn(33)
         //act
-        val result = subject.checkAndSaveBestScore(25)
+        val result = sut.checkAndSaveBestScore(25)
         //assert
         assertEquals(33, result)
         verify(scoreDaoMock).getLocalBestScore()
