@@ -2,7 +2,6 @@ package by.android.academy.minsk.fastfinger.score
 
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -42,9 +41,7 @@ class BestScoreUseCaseTest {
         val result = sut.checkAndSaveBestScore(42)
         //assert
         assertEquals(42, result)
-        verify(scoreDaoMock).getLocalBestScore()
         verify(scoreDaoMock).updateLocalBestScore(eq(42))
-        verifyNoMoreInteractions(scoreDaoMock)
     }
 
     @Test
