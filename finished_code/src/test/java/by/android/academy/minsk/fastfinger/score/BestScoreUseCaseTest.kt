@@ -11,11 +11,6 @@ class BestScoreUseCaseTest {
     private val scoreDaoMock = mock<ScoreDao>()
     private val sut = BestScoreUseCase(scoreDaoMock)
 
-    @After
-    fun checkNoMoreInteractions() {
-        verifyNoMoreInteractions(scoreDaoMock)
-    }
-
     @Test
     fun `should get best score from dao`() = runBlocking<Unit> {
         // arrange
@@ -25,7 +20,6 @@ class BestScoreUseCaseTest {
         val result = sut.getBestLocalScore()
         // assert
         assertEquals(33, result)
-        verify(scoreDaoMock).getLocalBestScore()
     }
 
     @Test
@@ -37,7 +31,6 @@ class BestScoreUseCaseTest {
         val result = sut.getBestLocalScore()
         // assert
         assertEquals(0, result)
-        verify(scoreDaoMock).getLocalBestScore()
     }
 
     @Test
@@ -51,6 +44,7 @@ class BestScoreUseCaseTest {
         assertEquals(42, result)
         verify(scoreDaoMock).getLocalBestScore()
         verify(scoreDaoMock).updateLocalBestScore(eq(42))
+        verifyNoMoreInteractions(scoreDaoMock)
     }
 
     @Test
@@ -63,5 +57,6 @@ class BestScoreUseCaseTest {
         //assert
         assertEquals(33, result)
         verify(scoreDaoMock).getLocalBestScore()
+        verifyNoMoreInteractions(scoreDaoMock)
     }
 }
