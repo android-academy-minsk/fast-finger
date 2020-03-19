@@ -53,7 +53,6 @@ class BestScoreUseCaseTest {
         val result = sut.checkAndSaveBestScore(25)
         //assert
         assertEquals(33, result)
-        verify(scoreDaoMock).getLocalBestScore()
-        verifyNoMoreInteractions(scoreDaoMock)
+        verify(scoreDaoMock, never()).updateLocalBestScore(any())
     }
 }
